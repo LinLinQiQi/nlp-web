@@ -1,7 +1,6 @@
 onmessage = function (e) {
     console.log('receivedaa:' + e.data[0]);
-    postMessage("push");
-    
+    postMessage("push"); 
 }
 
 

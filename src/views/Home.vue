@@ -21,11 +21,13 @@ import HelloWorld from "@/components/HelloWorld.vue";
 //   console.log("Myalpha:" + alpha)
 // }, 1000)
 
-import { test, main, alpha } from "../nodeword2vec";
+// import { test, main, alpha } from "../nodeword2vec";
+
 // import { testWorker } from "../workerTest";
 // import {Worker} from "../workerTest";
 // import myWorker from '../workerTest'
-import myWorker from 'worker-loader!../workerTest'
+import myWorker from 'worker-loader!../nodeword2vec'
+// import myWorker from 'worker-loader!../workerTest'
 
 // function word2vec(self, callback) {
 //   setTimeout(function() {
@@ -61,39 +63,18 @@ export default {
     };
   },
   mounted: function() {
-    test();
-    this.alpha = alpha
+    // test();
+    // this.alpha = alpha
     let worker = new myWorker;
-    // let myWorker = this.$worker.run(testWorker)
-    // myWorker.postMessage('func1')
-    //   .then(result => {
-    //     console.log("result:" + result)
-    //   }) // logs 'Worker 1: Working on func1'
-    //   .catch(console.error) // logs any possible error
-    // let myWorker = new Worker()
-    // let worker = new myWorker();
-    worker.postMessage("hh");
+   
+    worker.postMessage("start word2vec");
+    let self = this
     worker.onmessage = function(e) {
       let textContent = e.data;
+      self.alpha = textContent
       console.log('Message received from worker:' + textContent);
     }
-    // .then(result => {
-    //   console.log(result)
-    // })
-    // .catch(e => {
-    //   console.error(e)
-    // })
-    // if (window.Worker) {
-    //   var myWorker = new Worker('workerTest.js');
-    //   myWorker.postMessage([1 ,2]);
-    //   console.log('Message posted to worker');
-    //   myWorker.onmessage = function(e) {
-    //     let textContent = e.data;
-    //     console.log('Message received from worker:' + textContent);
-    //   }
-    // }else{
-    //   console.log('Your browser doesn\'t support web workers.')
-    // }
+    
     // changeTestChount(this)
     // let timer = setInterval(changeTestChount(this), 1000)
     // console.log("alpha:" + alpha);
@@ -104,19 +85,7 @@ export default {
     // }, 1000)
 
     // word2vec(this, done)
-    // console.log("???????")
-    // rs.on('data', function (chunk) {
-    //   console.log('DATA:' + String(chunk))
-    //     // strs += String(chunk)
-    // })
 
-    // rs.on('end', function () {
-    //     console.log('END');
-    // })
-
-    // rs.on('error', function (err) {
-    //     console.log('ERROR: ' + err);
-    // })
   }
 };
 </script>

@@ -40,10 +40,15 @@ export function test() {
 // let ws1 = fs.createWriteStream('output1.txt', 'utf-8');
 // let ve = fs.createWriteStream('vector.txt', 'utf-8');
 // LearnVocabFromTrainFile()
-// main()
+main()
 
-export function main(obj, self) {
-    obj.alpha = alpha
+onmessage = function (e) {
+    console.log('received Message:' + e.data)
+    // postMessage("push")
+}
+
+export function main() {
+    // obj.alpha = alpha
     // 计算sigmoid值
     for (let i = 0; i < EXP_TABLE_SIZE; i++) {
         expTable[i] = Math.exp((i / EXP_TABLE_SIZE * 2 - 1) * MAX_EXP); // Precompute the exp() table
@@ -59,7 +64,7 @@ export function main(obj, self) {
     CreateBinaryTree()
     InitNet()
     console.log("TrainModelThread")
-    TrainModelThread(obj, self)
+    TrainModelThread()
     // console.log("saveWordVectors")
     // saveWordVectors()
 }
@@ -370,7 +375,7 @@ function InitNet() {
 
 
 
-function TrainModelThread(obj, self) {
+function TrainModelThread() {
     let a, b, d, cw, word, last_word, sentence_length = 0, sentence_position = 0
     let word_count = 0, last_word_count = 0
     let sen = []
@@ -402,8 +407,9 @@ function TrainModelThread(obj, self) {
             if (alpha < starting_alpha * 0.0001) alpha = starting_alpha * 0.0001
 
             console.log("alpha:" + alpha)
-            obj.alpha = alpha
-            self.$forceUpdate()
+            postMessage(alpha)
+            // obj.alpha = alpha
+            // self.$forceUpdate()
             // sleep(500)
         }
 
