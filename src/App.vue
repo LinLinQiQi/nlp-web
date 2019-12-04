@@ -48,6 +48,7 @@
 // import HelloWorld from './components/HelloWorld';
 import Home from './views/Home';
 
+
 export default {
   name: 'App',
 
@@ -61,3 +62,8 @@ export default {
   }),
 };
 </script>
+<style>
+  @tailwind base;
+  @tailwind components;
+  @tailwind utilities;
+</style>

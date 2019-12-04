@@ -43,9 +43,13 @@
 
       <v-col cols="1" md="9">
         <v-layout>
-          <v-card class width="1600" height="500">
+          <v-card class width="1600" height="700">
             <v-container>
-              <v-btn small @click="runWord2vec">runWord2vec</v-btn>
+              <v-btn small @click="runWord2vec">运行Word2vec</v-btn>
+              <v-container>
+                <canvas id="myChart" style="width:1137px; height:400px"></canvas>
+              </v-container>
+
               <!-- <div>学习率：{{alpha}}</div>
               <div>已训练的单词数：{{testCount}}</div>
               <div>已迭代的词数：{{testObject.alpha}}</div>
@@ -62,6 +66,7 @@
 
 <script>
 import myWorker from "worker-loader!../nodeword2vec";
+import Chart from "chart.js";
 // import myWorker from 'worker-loader!../workerTest'
 
 // function word2vec(self, callback) {
@@ -112,6 +117,74 @@ export default {
     }
   },
   mounted: function() {
+    var ctx = document.getElementById("myChart").getContext("2d");
+    var color = Chart.helpers.color;
+    var scatterChart = new Chart(ctx, {
+      type: "scatter",
+      data: {
+        datasets: [
+          {
+            label: "His",
+            borderColor: "rgba(255, 99, 132, 1)",
+            backgroundColor: "rgba(255, 99, 132, 0.2)",
+            data: [
+              {
+                x: -10,
+                y: 10
+              }
+            ]
+          },
+          {
+            label: "He",
+            borderColor: "rgba(54, 162, 235, 1)",
+            backgroundColor: "rgba(54, 162, 235, 0.2)",
+            data: [
+              {
+                x: 10,
+                y: 10
+              }
+            ]
+          },
+          {
+            label: "Her",
+            borderColor: "rgba(240,230,140, 1)",
+            backgroundColor: "rgba(240,230,140, 0.2)",
+            data: [
+              {
+                x: 10,
+                y: -10
+              }
+            ]
+          },
+          {
+            label: "She",
+            borderColor: "rgba(127,255,170, 1)",
+            backgroundColor: "rgba(127,255,170, 0.2)",
+            data: [
+              {
+                x: -10,
+                y: -10
+              }
+            ]
+          }
+        ]
+      },
+      options: {
+        title: {
+          display: true,
+          text: "词向量表示"
+        },
+        scales: {
+          xAxes: [
+            {
+              type: "linear",
+              position: "bottom"
+            }
+          ]
+        }
+      }
+    });
+
     // let timer = setInterval(function() {
     //   console.log("Myalpha-------:" + alpha)
     // }, 1000)
