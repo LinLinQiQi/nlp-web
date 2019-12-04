@@ -4,7 +4,7 @@
     <div>{{testCount}}</div>
     <div>{{testObject.alpha}}</div>
     <img alt="Vue logo" src="../assets/logo.png" />
-    <HelloWorld msg="Welcome to Your Vue.js App" />
+    <!-- <HelloWorld msg="Welcome to Your Vue.js App" /> -->
   </div>
 </template>
 
@@ -14,7 +14,7 @@
 // let train_file = "text8"
 // let rs = fs.createReadStream(train_file, 'utf-8')
 // import fs from '../assets/text8';
-import HelloWorld from "@/components/HelloWorld.vue";
+// import HelloWorld from "@/components/HelloWorld.vue";
 // import fs from "../static/text_json.json";
 // console.log("strs length:" + strs.length)
 // let timer = setInterval(function() {
@@ -49,9 +49,9 @@ import myWorker from 'worker-loader!../nodeword2vec'
 // }
 
 export default {
-  name: "home",
+  name: "Home",
   components: {
-    HelloWorld
+    // HelloWorld
   },
   data: function(){
     return {
