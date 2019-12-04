@@ -23,6 +23,7 @@ let train_words = 0
 let starting_alpha = alpha
 let window = 5
 let hs = 1
+let inspectWords = []
 export {alpha, vocab_hash}
 // let strs = []
 
@@ -33,6 +34,16 @@ export function test() {
     console.log("export successful")
 }
 
+function postWordVector(){
+    for (const index in inspectWords) {
+        let word = inspectWords[index]
+        let indextemp = SearchVocab(word)
+        let vec_one = syn0[indextemp * layer1_size + 0]
+        let vec_two = syn0[indextemp * layer1_size + 1]
+        postMessage(["word", word, vec_one, vec_two])
+    }
+    
+}
 // var fs = require('fs');
 
 // 打开一个流:
@@ -40,10 +51,12 @@ export function test() {
 // let ws1 = fs.createWriteStream('output1.txt', 'utf-8');
 // let ve = fs.createWriteStream('vector.txt', 'utf-8');
 // LearnVocabFromTrainFile()
-main()
+// main()
+setTimeout(main, 1000);
 
 onmessage = function (e) {
     console.log('received Message:' + e.data)
+    inspectWords = e.data
     // postMessage("push")
 }
 
@@ -410,6 +423,7 @@ function TrainModelThread() {
             console.log("alpha:" + alpha)
             postMessage(["alpha", alpha])
             postMessage(["trainedWords", word_count])
+            postWordVector()
             // obj.alpha = alpha
             // self.$forceUpdate()
             // sleep(500)
