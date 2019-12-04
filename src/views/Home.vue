@@ -1,32 +1,67 @@
 <template>
   <div class="home">
-    <div>{{alpha}}</div>
-    <div>{{testCount}}</div>
-    <div>{{testObject.alpha}}</div>
-    <img alt="Vue logo" src="../assets/logo.png" />
+    <h2 class="mt-12 headline font-weight-bold mb-3 text-center">word2vec</h2>
+    <v-row class="ml-12">
+      <v-col cols="3" md="2">
+        <v-card width="200" class="ml-8">
+          <v-card-title>
+            <h4>{{ parameter.name }}</h4>
+          </v-card-title>
+          <v-divider></v-divider>
+          <v-list>
+            <v-list-item>
+              <v-list-item-content>总共训练的词数:</v-list-item-content>
+              <v-list-item-content>{{ parameter.totalWords }}</v-list-item-content>
+            </v-list-item>
+            <v-list-item>
+              <v-list-item-content>所训练的向量维度:</v-list-item-content>
+              <v-list-item-content class="align-end">{{ parameter.dims }}</v-list-item-content>
+            </v-list-item>
+            <v-list-item>
+              <v-list-item-content>学习率:</v-list-item-content>
+              <v-list-item-content class="align-end">{{ parameter.alpha }}</v-list-item-content>
+            </v-list-item>
+            <v-list-item>
+              <v-list-item-content>已训练的单词数:</v-list-item-content>
+              <v-list-item-content class="align-end">{{ parameter.trainedWords }}</v-list-item-content>
+            </v-list-item>
+            <v-list-item>
+              <v-list-item-content>已迭代的词数:</v-list-item-content>
+              <v-list-item-content class="align-end">{{ parameter.iters }}</v-list-item-content>
+            </v-list-item>
+            <v-list-item>
+              <v-list-item-content>已训练的时间:</v-list-item-content>
+              <v-list-item-content class="align-end">{{ parameter.trainedTime }}</v-list-item-content>
+            </v-list-item>
+            <!-- <v-list-item>
+              <v-list-item-content>Iron:</v-list-item-content>
+              <v-list-item-content class="align-end">{{ item.iron }}</v-list-item-content>
+            </v-list-item>-->
+          </v-list>
+        </v-card>
+      </v-col>
+
+      <v-col cols="1" md="9">
+        <v-layout>
+          <v-card class width="1600" height="500">
+            <v-container>
+              <v-btn small @click="runWord2vec">runWord2vec</v-btn>
+              <!-- <div>学习率：{{alpha}}</div>
+              <div>已训练的单词数：{{testCount}}</div>
+              <div>已迭代的词数：{{testObject.alpha}}</div>
+              <div>已训练的时间：{{alpha}}</div>-->
+            </v-container>
+          </v-card>
+        </v-layout>
+      </v-col>
+    </v-row>
+
     <!-- <HelloWorld msg="Welcome to Your Vue.js App" /> -->
   </div>
 </template>
 
 <script>
-// @ is an alias to /src
-// let fs = require('fs')
-// let train_file = "text8"
-// let rs = fs.createReadStream(train_file, 'utf-8')
-// import fs from '../assets/text8';
-// import HelloWorld from "@/components/HelloWorld.vue";
-// import fs from "../static/text_json.json";
-// console.log("strs length:" + strs.length)
-// let timer = setInterval(function() {
-//   console.log("Myalpha:" + alpha)
-// }, 1000)
-
-// import { test, main, alpha } from "../nodeword2vec";
-
-// import { testWorker } from "../workerTest";
-// import {Worker} from "../workerTest";
-// import myWorker from '../workerTest'
-import myWorker from 'worker-loader!../nodeword2vec'
+import myWorker from "worker-loader!../nodeword2vec";
 // import myWorker from 'worker-loader!../workerTest'
 
 // function word2vec(self, callback) {
@@ -37,55 +72,49 @@ import myWorker from 'worker-loader!../nodeword2vec'
 //   }, 1000);
 // }
 
-// function changeTestChount(self){
-//   // this.testCount += 1;
-//    let timer = setInterval(function() {
-//       self.testCount += 1;
-//     }, 1000)
-// }
-
-// function done(){
-//   console.log("word2vec done")
-// }
-
 export default {
   name: "Home",
   components: {
     // HelloWorld
   },
-  data: function(){
+  data: function() {
     return {
       alpha: 0,
       testCount: 0,
       testObject: {
-        alpha: -1,
+        alpha: -1
+      },
+      parameter: {
+        name: "训练相关参数",
+        totalWords: 0,
+        dims: 2,
+        alpha: 0.025,
+        trainedWords: 0,
+        iters: 0,
+        trainedTime: 0
       }
     };
   },
-  mounted: function() {
-    // test();
-    // this.alpha = alpha
-    let worker = new myWorker;
-   
-    worker.postMessage("start word2vec");
-    let self = this
-    worker.onmessage = function(e) {
-      let textContent = e.data;
-      self.alpha = textContent
-      console.log('Message received from worker:' + textContent);
-    }
-    
-    // changeTestChount(this)
-    // let timer = setInterval(changeTestChount(this), 1000)
-    // console.log("alpha:" + alpha);
+  methods: {
+    runWord2vec() {
+      let worker = new myWorker();
+      worker.postMessage("start word2vec");
+      let self = this;
+      worker.onmessage = function(e) {
+        // let textContent = e.data;
+        // self.alpha = textContent
+        let name = e.data[0];
+        let data = e.data[1];
 
-    // main(this.testObject, this)
+        self.parameter[name] = data;
+        // console.log('Message received from worker:' + textContent);
+      };
+    }
+  },
+  mounted: function() {
     // let timer = setInterval(function() {
     //   console.log("Myalpha-------:" + alpha)
     // }, 1000)
-
-    // word2vec(this, done)
-
   }
 };
 </script>

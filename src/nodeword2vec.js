@@ -155,6 +155,7 @@ function LearnVocabFromTrainFile() {
 
     // strs = strs.split(" ")
     train_words = strs.length
+    
     console.log("itrain_words: " + train_words)
     // console.log(strs)
     console.log("vocab_hash")
@@ -180,7 +181,7 @@ function LearnVocabFromTrainFile() {
             vocab[a].cn = 1;// 设置词出现的次数为1
         } else vocab[i].cn++;// 设置词出现的次数+1
     }
-
+    postMessage(["totalWords", vocab_size])
     // // 根据当前词的个数和设定的hash表的大小，删除低频词
     // if (vocab_size > vocab_hash_size * 0.7) ReduceVocab();
 
@@ -407,7 +408,8 @@ function TrainModelThread() {
             if (alpha < starting_alpha * 0.0001) alpha = starting_alpha * 0.0001
 
             console.log("alpha:" + alpha)
-            postMessage(alpha)
+            postMessage(["alpha", alpha])
+            postMessage(["trainedWords", word_count])
             // obj.alpha = alpha
             // self.$forceUpdate()
             // sleep(500)
@@ -499,6 +501,7 @@ function TrainModelThread() {
             // 重置文件指针
             // fseek(fi, file_size / (long long)num_threads * (long long)id, SEEK_SET);
             strs_beg = 0
+            postMessage(["iters", iter - local_iter])
             continue;
         }
 
