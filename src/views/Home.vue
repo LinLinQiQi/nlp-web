@@ -3,23 +3,24 @@
     <h2 class="mt-4 headline font-weight-bold mb-3 text-center">word2vec</h2>
     <div class="flex object-none object-center">
       <div class="w-60">
-        <v-card width="400">
+        <v-card width="400" height="400">
           <v-card-title>
             <h4>{{ parameter.name }}</h4>
           </v-card-title>
           <v-divider></v-divider>
           <div class="mt-4 ml-4">总共训练的词数:{{ parameter.totalWords }}</div>
           <div class="mt-4 ml-4">所训练的向量维度:{{ parameter.dims }}</div>
-          <div class="mt-4 ml-4">学习率:{{ parameter.alpha }}</div>
+          <div class="mt-4 ml-4">学习率:</div>
+          <div class="mt-4 ml-4">{{ parameter.alpha }}</div>
           <div class="mt-4 ml-4">已训练的单词数:{{ parameter.trainedWords }}</div>
           <div class="mt-4 ml-4">已迭代的词数:{{ parameter.iters }}</div>
-          <div class="mt-4 ml-4 pb-4">已训练的时间:{{ parameter.trainedTime }}</div>
+          
         </v-card>
         <v-btn class="mt-10" small @click="runWord2vec">运行Word2vec</v-btn>
       </div>
 
       <div class="ml-12">
-        <v-card class="w-auto" height="700">
+        <v-card class="w-auto" height="550">
           <v-container>
             <canvas id="myChart" style="width:1000px; height:400px"></canvas>
           </v-container>
@@ -34,10 +35,16 @@
         </v-card>
       </div>
     </div>
+    
   </div>
 </template>
 
 <script>
+// <div class="ml-10 mt-10 object-none object-center">
+//       <v-card class width="2000" height="400">
+//         <iframe width="2000" height="400" src="file:///Users/susubobo/Downloads/%E4%B9%94%E8%B4%BA%E8%BE%99%202019E8018561005/%E6%BA%90%E4%BB%A3%E7%A0%81/NLP_GNTL/demo_infer/web_demo/nlp.html">IE：你们都看我干吗，我现在也是支持的</iframe>
+//       </v-card>
+//     </div>
 import myWorker from "worker-loader!../nodeword2vec";
 import Chart from "chart.js";
 // import myWorker from 'worker-loader!../workerTest'
@@ -156,36 +163,39 @@ export default {
       };
     },
     calWordsMap() {
-      this.inspectWordsMap = new Map()
+      this.inspectWordsMap = new Map();
       for (const index in this.datasets) {
         this.inspectWordsMap.set(this.datasets[index].label, index);
       }
     },
 
     addInspectWord() {
-      let rgbRandom = "rgba(" + this.getRandomInt(255) + "," + this.getRandomInt(255) + "," + this.getRandomInt(255)
-      this.inspectWords.push(this.addWord)
-      this.datasets.push(
-        {
-          label: this.addWord,
-          borderColor: rgbRandom + ", 1)",
-          backgroundColor: rgbRandom + ", 0.2)",
-          data: [
-            {
-              x: 0,
-              y: 0
-            }
-          ]
-        }
-      )
+      let rgbRandom =
+        "rgba(" +
+        this.getRandomInt(255) +
+        "," +
+        this.getRandomInt(255) +
+        "," +
+        this.getRandomInt(255);
+      this.inspectWords.push(this.addWord);
+      this.datasets.push({
+        label: this.addWord,
+        borderColor: rgbRandom + ", 1)",
+        backgroundColor: rgbRandom + ", 0.2)",
+        data: [
+          {
+            x: 0,
+            y: 0
+          }
+        ]
+      });
       this.scatterChart.update();
-      this.addWord = ""
+      this.addWord = "";
     },
 
     getRandomInt(max) {
       return Math.floor(Math.random() * Math.floor(max));
     }
-
   },
   mounted: function() {
     var ctx = document.getElementById("myChart").getContext("2d");
